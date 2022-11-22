@@ -26,6 +26,6 @@ fun ChoseScreen(navController: NavController) {
             Text(text = "BPM")
         }
     }
-    }
+}
 
 

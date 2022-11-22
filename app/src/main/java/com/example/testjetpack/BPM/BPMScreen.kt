@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
-fun BPMScreen(navController: NavController) {
+fun BPMScreen(navController: NavController, activity: MainActivity) {
     Scaffold(
         topBar = { BPMTopBar() }
     ) {
