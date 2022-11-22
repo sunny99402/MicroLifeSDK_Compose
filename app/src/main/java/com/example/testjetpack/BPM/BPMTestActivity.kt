@@ -1,12 +1,9 @@
 package com.example.testjetpack.BPM
 
 import android.Manifest
-import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import com.ideabus.model.protocol.BPMProtocol
 import com.ideabus.model.bluetooth.MyBluetoothLE
 import android.os.Bundle
@@ -15,9 +12,9 @@ import android.view.View
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
-import androidx.core.app.ActivityCompat
 import com.example.testjetpack.Global
 import com.example.testjetpack.LogListAdapter
 import com.ideabus.ideabuslibrary.util.BaseUtils
@@ -25,7 +22,7 @@ import com.ideabus.model.data.*
 import java.lang.StringBuilder
 import java.util.*
 
-class BPMTestActivity : AppCompatActivity(), BPMProtocol.OnConnectStateListener,
+class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
     View.OnClickListener, BPMProtocol.OnDataResponseListener, BPMProtocol.OnNotifyStateListener,
     MyBluetoothLE.OnWriteStateListener {
     private val TAG = "BPMTestActivity"

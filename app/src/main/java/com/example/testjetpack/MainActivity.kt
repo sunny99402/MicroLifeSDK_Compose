@@ -14,6 +14,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -69,7 +70,7 @@ class MainActivity : ComponentActivity() {
                 ChoseScreen(navController)
             }
             composable("bpm") {
-                BPMScreen(navController = navController, activity = this@MainActivity)
+                BPMScreen(navController = navController,)
             }
         }
     }
