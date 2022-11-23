@@ -1,5 +1,7 @@
 package com.example.testjetpack
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -9,15 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.ideabus.model.protocol.BPMProtocol
-
 
 @Composable
-fun BPMScreen(
-    navController: NavController,
-    activity: MainActivity
-    ) {
+fun BPMScreen() {
 
     Scaffold(
         topBar = { BPMTopBar() }

@@ -1,4 +1,4 @@
-package com.example.testjetpack.BPM
+package com.example.testjetpack
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -13,10 +13,9 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.compose.setContent
 import androidx.appcompat.widget.Toolbar
-import com.example.testjetpack.Global
-import com.example.testjetpack.LogListAdapter
+import com.example.testjetpack.ui.theme.TestJetpackTheme
 import com.ideabus.ideabuslibrary.util.BaseUtils
 import com.ideabus.model.data.*
 import java.lang.StringBuilder
@@ -37,7 +36,10 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         //Initialize the body ester machine Bluetooth module
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_bpmtest)
+
+        setContent {
+            BPMScreen()
+        }
         initView()
         initParam()
         initListener()
@@ -54,7 +56,7 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
 
         //Initialize the connection SDK
         Global.bpmProtocol = BPMProtocol.getInstance(this, false, true, Global.sdkid_BPM)
-        toolbar!!.subtitle = "Blood Pressure " + Global.bpmProtocol?.getSDKVersion()
+        //toolbar!!.subtitle = "Blood Pressure " + Global.bpmProtocol?.getSDKVersion()
         logListAdapter = LogListAdapter(this)
         //bpmList.adapter = logListAdapter
     }
@@ -65,6 +67,7 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
     override fun onStart() {
         Log.d(TAG, "1026 onStart")
         super.onStart()
+
         Global.bpmProtocol!!.setOnConnectStateListener(this)
         Global.bpmProtocol!!.setOnDataResponseListener(this)
         Global.bpmProtocol!!.setOnNotifyStateListener(this)
