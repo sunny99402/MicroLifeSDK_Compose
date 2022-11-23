@@ -49,7 +49,7 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
         //findViewById<View>(R.id.buttonView).visibility = View.GONE
     }
 
-    private fun initParam() {
+    fun initParam() {
         //setSupportActionBar(toolbar)
 
         //Initialize the connection SDK
@@ -69,34 +69,7 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
         Global.bpmProtocol!!.setOnDataResponseListener(this)
         Global.bpmProtocol!!.setOnNotifyStateListener(this)
         Global.bpmProtocol!!.setOnWriteStateListener(this)
-        checkPermission()
         startScan()
-    }
-
-    private fun checkPermission() {
-        var requestBluetooth = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
-                //granted
-            }else{
-                //deny
-            }
-        }
-
-        val requestMultiplePermissions =
-            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-                permissions.entries.forEach {
-                    Log.e("testKotlin", "${it.key} = ${it.value}")
-                }
-            }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            requestMultiplePermissions.launch(arrayOf(
-                Manifest.permission.BLUETOOTH_SCAN,
-                Manifest.permission.BLUETOOTH_CONNECT))
-        }
-        else{
-            val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
-            requestBluetooth.launch(enableBtIntent)
-        }
     }
 
     override fun onDestroy() {
