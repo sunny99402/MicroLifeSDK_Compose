@@ -1,7 +1,5 @@
 package com.example.testjetpack
 
-import android.app.Activity
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -11,6 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+
+var userID = "123456789AB"
+var age = 18
 
 @Composable
 fun BPMScreen() {
@@ -49,7 +50,7 @@ fun ButtonView() {
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(start = 3.dp, end = 3.dp)) {
             Button(
-                onClick = {  },
+                onClick = { Global.bpmProtocol!!.readHistorysOrCurrDataAndSyncTiming() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -58,14 +59,14 @@ fun ButtonView() {
                 Text(text = "ReadHistory")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.clearAllHistorys() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier.weight(1f)
             ) {
                 Text(text = "ClearHistory")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.disconnect() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -78,7 +79,7 @@ fun ButtonView() {
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(start = 3.dp, end = 3.dp)) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.readDeviceInfo() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -87,14 +88,15 @@ fun ButtonView() {
                 Text(text = "ReadDevice")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    Global.bpmProtocol!!.writeUserData(userID, age) },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier.weight(1f)
             ) {
                 Text(text = "WriteUser")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.readUserAndVersionData() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -107,7 +109,7 @@ fun ButtonView() {
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(start = 3.dp, end = 3.dp)) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.readLastData() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -116,7 +118,7 @@ fun ButtonView() {
                 Text(text = "Read Last Data")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.clearLastData() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -129,7 +131,7 @@ fun ButtonView() {
             .wrapContentWidth(Alignment.CenterHorizontally)
             .padding(start = 3.dp, end = 3.dp)) {
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.readDeviceTime() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)
@@ -138,7 +140,7 @@ fun ButtonView() {
                 Text(text = "Read Device Time")
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { Global.bpmProtocol!!.syncTiming() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
                 modifier = Modifier
                     .weight(1f)

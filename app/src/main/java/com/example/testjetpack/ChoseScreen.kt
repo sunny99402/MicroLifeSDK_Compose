@@ -1,6 +1,5 @@
 package com.example.testjetpack
 
-import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.testjetpack.BPM.BPMTestActivity
 
 @Composable
 fun ChoseScreen(

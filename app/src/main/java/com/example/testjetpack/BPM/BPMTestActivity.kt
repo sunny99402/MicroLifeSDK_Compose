@@ -1,9 +1,5 @@
-package com.example.testjetpack
+package com.example.testjetpack.BPM
 
-import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.content.Intent
-import android.os.Build
 import com.ideabus.model.protocol.BPMProtocol
 import com.ideabus.model.bluetooth.MyBluetoothLE
 import android.os.Bundle
@@ -15,7 +11,9 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.widget.Toolbar
-import com.example.testjetpack.ui.theme.TestJetpackTheme
+import com.example.testjetpack.BPMScreen
+import com.example.testjetpack.Global
+import com.example.testjetpack.LogListAdapter
 import com.ideabus.ideabuslibrary.util.BaseUtils
 import com.ideabus.model.data.*
 import java.lang.StringBuilder
@@ -30,8 +28,6 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
     private val isSendPersonParam = false
     private var toolbar: Toolbar? = null
     private var isConnecting = false
-    private var userID = "123456789AB"
-    private var age = 18
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Initialize the body ester machine Bluetooth module
@@ -217,21 +213,5 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
                 startScan()
             }
         }
-    }
-
-    fun setUserInfo() {
-        val ran = Random()
-        val A = IntArray(11)
-        val stringBuilder = StringBuilder()
-        for (i in 0..10) {
-            if (i < 9) {
-                A[i] = (Math.random() * 10 + 48).toInt()
-            } else {
-                A[i] = (Math.random() * 26 + 65).toInt()
-            }
-            stringBuilder.append(A[i].toChar())
-        }
-        userID = stringBuilder.toString()
-        age = 18 + ran.nextInt(62)
     }
 }

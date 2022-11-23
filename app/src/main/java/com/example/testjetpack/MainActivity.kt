@@ -28,15 +28,6 @@ import java.lang.StringBuilder
 import java.util.*
 
 class MainActivity : ComponentActivity() {
-    private val TAG = "BPMTestActivity"
-    lateinit var bpmList: ListView
-    private lateinit var logListAdapter: LogListAdapter
-    private val isSendPersonParam = false
-    private var toolbar: Toolbar? = null
-    private var isConnecting = false
-    private var userID = "123456789AB"
-    private var age = 18
-
     private var requestBluetooth = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == RESULT_OK) {
             //granted
@@ -62,7 +53,9 @@ class MainActivity : ComponentActivity() {
                         Manifest.permission.BLUETOOTH,
                         Manifest.permission.BLUETOOTH_SCAN,
                         Manifest.permission.BLUETOOTH_ADMIN,
-                        Manifest.permission.BLUETOOTH_CONNECT))
+                        Manifest.permission.BLUETOOTH_CONNECT,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION))
                 }
                 else{
                     val enableBtIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
