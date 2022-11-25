@@ -6,58 +6,36 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ListView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.appcompat.widget.Toolbar
-import com.example.testjetpack.BPMScreen
-import com.example.testjetpack.Global
-import com.example.testjetpack.LogListAdapter
+import androidx.activity.viewModels
+import com.example.testjetpack.*
 import com.ideabus.ideabuslibrary.util.BaseUtils
 import com.ideabus.model.data.*
-import java.lang.StringBuilder
-import java.util.*
 
-class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
+class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListener,
     View.OnClickListener, BPMProtocol.OnDataResponseListener, BPMProtocol.OnNotifyStateListener,
     MyBluetoothLE.OnWriteStateListener {
     private val TAG = "BPMTestActivity"
-    lateinit var bpmList: ListView
-    private lateinit var logListAdapter: LogListAdapter
-    private val isSendPersonParam = false
-    private var toolbar: Toolbar? = null
+    var logListAdapter: LogListAdapter? = null
     private var isConnecting = false
+
+    private val vm: LogViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Initialize the body ester machine Bluetooth module
         super.onCreate(savedInstanceState)
-
-        setContent {
-            BPMScreen()
-        }
-        initView()
         initParam()
-        initListener()
-    }
-
-    private fun initView() {
-        //toolbar = findViewById<View>(R.id.tool_bar) as Toolbar
-        //bpmList = findViewById<View>(R.id.bpm_list_view) as ListView
-        //findViewById<View>(R.id.buttonView).visibility = View.GONE
+        setContent {
+            ConnectScreen()
+        }
     }
 
     fun initParam() {
-        //setSupportActionBar(toolbar)
-
         //Initialize the connection SDK
         Global.bpmProtocol = BPMProtocol.getInstance(this, false, true, Global.sdkid_BPM)
-        //toolbar!!.subtitle = "Blood Pressure " + Global.bpmProtocol?.getSDKVersion()
-        logListAdapter = LogListAdapter(this)
-        //bpmList.adapter = logListAdapter
-    }
-
-    private fun initListener() {
+        logListAdapter = LogListAdapter()
     }
 
     override fun onStart() {
@@ -82,7 +60,7 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
             Log.d(TAG, "1026 not support Bluetooth")
             return
         }
-        logListAdapter?.addLog("start scan")
+        logListAdapter?.addLog("start scan", model = vm)
         Global.bpmProtocol!!.startScan(10)
     }
 
@@ -94,35 +72,35 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
 
     override fun onClick(v: View) {
         val btn = findViewById<View>(v.id) as Button
-        logListAdapter?.addLog("WRITE : " + btn.text.toString())
+        logListAdapter?.addLog("WRITE : " + btn.text.toString(), model = vm)
 
     }
 
     override fun onWriteMessage(isSuccess: Boolean, message: String) {
-        logListAdapter?.addLog("WRITE : $message")
+        logListAdapter?.addLog("WRITE : $message", model = vm)
     }
 
     override fun onNotifyMessage(message: String) {
-        logListAdapter?.addLog("NOTIFY : $message")
+        logListAdapter?.addLog("NOTIFY : $message", model = vm)
     }
 
     override fun onResponseReadHistory(dRecord: DRecord) {
-        logListAdapter?.addLog("BPM : ReadHistory -> DRecord = $dRecord")
+        logListAdapter?.addLog("BPM : ReadHistory -> DRecord = $dRecord", model = vm)
     }
 
     override fun onResponseClearHistory(isSuccess: Boolean) {
-        logListAdapter?.addLog("BPM : ClearHistory -> isSuccess = $isSuccess")
+        logListAdapter?.addLog("BPM : ClearHistory -> isSuccess = $isSuccess", model = vm)
     }
 
     override fun onResponseReadUserAndVersionData(user: User, versionData: VersionData) {
         logListAdapter?.addLog(
             "BPM : ReadUserAndVersionData -> user = " + user +
                     " , versionData = " + versionData
-        )
+            , model = vm)
     }
 
     override fun onResponseWriteUser(isSuccess: Boolean) {
-        logListAdapter?.addLog("BPM : WriteUser -> isSuccess = $isSuccess")
+        logListAdapter?.addLog("BPM : WriteUser -> isSuccess = $isSuccess", model = vm)
     }
 
     override fun onResponseReadLastData(
@@ -137,23 +115,23 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
                     " historyMeasuremeNumber = " + historyMeasuremeNumber +
                     " userNumber = " + userNumber + " MAMState = " + MAMState +
                     " isNoData = " + isNoData
-        )
+            , model = vm)
     }
 
     override fun onResponseClearLastData(isSuccess: Boolean) {
-        logListAdapter?.addLog("BPM : ClearLastData -> isSuccess = $isSuccess")
+        logListAdapter?.addLog("BPM : ClearLastData -> isSuccess = $isSuccess", model = vm)
     }
 
     override fun onResponseReadDeviceInfo(deviceInfo: DeviceInfo) {
-        logListAdapter?.addLog("BPM : ReadDeviceInfo -> DeviceInfo = $deviceInfo")
+        logListAdapter?.addLog("BPM : ReadDeviceInfo -> DeviceInfo = $deviceInfo", model = vm)
     }
 
     override fun onResponseWriteDeviceTime(isSuccess: Boolean) {
-        logListAdapter?.addLog("BPM : Write -> DeviceTime = $isSuccess")
+        logListAdapter?.addLog("BPM : Write -> DeviceTime = $isSuccess", model = vm)
     }
 
     override fun onResponseReadDeviceTime(deviceInfo: DeviceInfo) {
-        logListAdapter?.addLog("BPM : Read -> DeviceTime = $deviceInfo")
+        logListAdapter?.addLog("BPM : Read -> DeviceTime = $deviceInfo", model = vm)
     }
 
     override fun onBtStateChanged(isEnable: Boolean) {
@@ -170,7 +148,7 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
         BaseUtils.printLog("d", TAG, "1026 onScanResult:$name")
         //Blood pressure machine
         if (!name.startsWith("n/a")) {
-            logListAdapter?.addLog("onScanResult：$name mac:$mac rssi:$rssi")
+            logListAdapter?.addLog("onScanResult：$name mac:$mac rssi:$rssi", model = vm)
         }
         if (isConnecting) return
         isConnecting = true
@@ -178,11 +156,11 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
         Global.bpmProtocol!!.stopScan()
         //Connection
         if (name.startsWith("A")) {
-            logListAdapter?.addLog("3G Model！")
+            logListAdapter?.addLog("3G Model！", model = vm)
             Global.bpmProtocol!!.connect(mac)
 
         } else {
-            logListAdapter?.addLog("4G Model！")
+            logListAdapter?.addLog("4G Model！", model = vm)
             Global.bpmProtocol!!.bond(mac)
 
         }
@@ -193,23 +171,25 @@ class BPMTestActivity : ComponentActivity(), BPMProtocol.OnConnectStateListener,
         when (state) {
             BPMProtocol.ConnectState.Connected -> {
                 isConnecting = false
-                //findViewById<View>(R.id.buttonView).visibility = View.VISIBLE
-                logListAdapter?.addLog("Connected")
+                logListAdapter?.addLog("Connected", model = vm)
+                setContent {
+                    BPMScreen(logListAdapter = logListAdapter, vm)
+                }
             }
             BPMProtocol.ConnectState.ConnectTimeout -> {
                 isConnecting = false
-                //findViewById<View>(R.id.buttonView).visibility = View.GONE
-                logListAdapter?.addLog("ConnectTimeout")
+                logListAdapter?.addLog("ConnectTimeout", model = vm)
             }
             BPMProtocol.ConnectState.Disconnect -> {
                 isConnecting = false
-                //findViewById<View>(R.id.buttonView).visibility = View.GONE
-                logListAdapter?.addLog("Disconnected")
+                logListAdapter?.addLog("Disconnected", model = vm)
                 startScan()
+                setContent {
+                    ConnectScreen()
+                }
             }
             BPMProtocol.ConnectState.ScanFinish -> {
-                //findViewById<View>(R.id.buttonView).visibility = View.GONE
-                logListAdapter?.addLog("ScanFinish")
+                logListAdapter?.addLog("ScanFinish", model = vm)
                 startScan()
             }
         }

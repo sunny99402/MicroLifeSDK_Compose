@@ -2,32 +2,54 @@ package com.example.testjetpack
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.testjetpack.BPM.LogViewModel
 
 var userID = "123456789AB"
 var age = 18
 
 @Composable
-fun BPMScreen() {
+fun ConnectScreen() {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .wrapContentWidth(Alignment.CenterHorizontally)
+        .wrapContentHeight(Alignment.CenterVertically)) {
+        Text(
+            text = "Connect Device",
+            fontSize = 50.sp)
+    }
+}
+
+@Composable
+fun BPMScreen(
+    logListAdapter: LogListAdapter?,
+    model: LogViewModel
+) {
+    val data by model.buzzLiveData.observeAsState(initial = emptyList())
 
     Scaffold(
         topBar = { BPMTopBar() }
     ) {
-        Column() {
+        Column(modifier = Modifier.fillMaxSize()) {
             ButtonView()
-            TextList()
+            TextList(data, model)
         }
     }
 }
 
 @Composable
-fun TextList() {
+fun TextList(data: List<String>, model: LogViewModel) {
+    //var list = logListAdapter!!.getList()
+
     Column() {
         Text(
             text = "Log",
@@ -36,6 +58,11 @@ fun TextList() {
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
         )
+        LazyColumn() {
+            items(data) { index ->
+                Text(text = index)
+            }
+        }
     }
 }
 
@@ -158,7 +185,7 @@ fun BPMTopBar() {
         title = {
             Column() {
                 Text(text = "Microlife SDK Test", fontSize = 20.sp)
-                Text(text = "Blood Pressure", fontSize = 15.sp)
+                Text(text = "Blood Pressure ${Global.bpmProtocol!!.sdkVersion}", fontSize = 15.sp)
             }
         },
         backgroundColor = Color.White
