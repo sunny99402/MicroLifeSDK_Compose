@@ -173,7 +173,7 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
                 isConnecting = false
                 logListAdapter?.addLog("Connected", model = vm)
                 setContent {
-                    BPMScreen(logListAdapter = logListAdapter, vm)
+                    BPMScreen(model =  vm)
                 }
             }
             BPMProtocol.ConnectState.ConnectTimeout -> {

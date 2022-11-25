@@ -1,6 +1,7 @@
 package com.example.testjetpack
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.testjetpack.BPM.LogViewModel
 
 var userID = "123456789AB"
 var age = 18
@@ -30,10 +30,7 @@ fun ConnectScreen() {
 }
 
 @Composable
-fun BPMScreen(
-    logListAdapter: LogListAdapter?,
-    model: LogViewModel
-) {
+fun BPMScreen(model: LogViewModel) {
     val data by model.buzzLiveData.observeAsState(initial = emptyList())
 
     Scaffold(
@@ -41,15 +38,13 @@ fun BPMScreen(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             ButtonView()
-            TextList(data, model)
+            TextList(data)
         }
     }
 }
 
 @Composable
-fun TextList(data: List<String>, model: LogViewModel) {
-    //var list = logListAdapter!!.getList()
-
+fun TextList(data: List<String>) {
     Column() {
         Text(
             text = "Log",
@@ -60,7 +55,9 @@ fun TextList(data: List<String>, model: LogViewModel) {
         )
         LazyColumn() {
             items(data) { index ->
-                Text(text = index)
+                Text(
+                    text = index,
+                    modifier = Modifier.fillMaxWidth().border(1.dp, color = Color(245,245,245)))
             }
         }
     }

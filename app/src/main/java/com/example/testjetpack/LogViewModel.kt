@@ -1,4 +1,4 @@
-package com.example.testjetpack.BPM
+package com.example.testjetpack
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

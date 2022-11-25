@@ -6,7 +6,6 @@ import android.widget.BaseAdapter
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.testjetpack.BPM.LogViewModel
 
 class LogListAdapter() : BaseAdapter() {
     private val mLogData: MutableList<String>
@@ -18,7 +17,10 @@ class LogListAdapter() : BaseAdapter() {
     fun addLog(message: String, model: LogViewModel): MutableList<String> {
         Log.e("addLog", message)
         mLogData.add(message)
+
+        //view model
         model.addData(message)
+
         notifyDataSetChanged()
         return mLogData
     }
