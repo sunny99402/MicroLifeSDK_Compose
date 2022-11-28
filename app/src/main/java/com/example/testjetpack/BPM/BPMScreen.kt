@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 
 var userID = "123456789AB"
 var age = 18
@@ -21,7 +23,7 @@ var age = 18
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun BPMScreen(model: ViewModel) {
-    val data by model.buzzLiveData.observeAsState(initial = emptyList())
+    val data by model.listData.observeAsState(initial = emptyList())
     val name by mutableStateOf(model.name)
     val connectState by mutableStateOf(model.isConnect)
 
@@ -47,14 +49,22 @@ fun TextList(data: List<String>) {
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.CenterHorizontally)
         )
-        LazyColumn() {
+
+        val listState = rememberLazyListState()
+        // Remember a CoroutineScope to be able to launch
+        val coroutineScope = rememberCoroutineScope()
+        LazyColumn(state = listState) {
             items(data) { index ->
                 TextItem(
                     text = index,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .border(1.dp, color = Color(245, 245, 245))
+                        .border(1.dp, color = Color(245, 245, 245)),
                 )
+            }
+            coroutineScope.launch {
+                // Animate scroll to the last item
+                listState.animateScrollToItem(index = data.size)
             }
         }
     }
@@ -62,14 +72,14 @@ fun TextList(data: List<String>) {
 
 @Composable
 fun TextItem(text: String, modifier: Modifier) {
-    var color: Color
-    if(text.startsWith("WRITE")) {
-        color = Color.Red
-    } else if(text.startsWith("NOTIFY")) {
-        color = Color.Blue
-    } else {
-        color = Color.Green
-    }
+    var color: Color =
+        if(text.startsWith("WRITE")) {
+            Color.Red
+        } else if(text.startsWith("NOTIFY")) {
+            Color.Blue
+        } else {
+            Color.Green
+        }
     Text(
         text = text,
         modifier = modifier,

@@ -6,15 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class ViewModel : ViewModel() {
-    private val _buzzLiveData = MutableLiveData<List<String>>(emptyList())
-    val buzzLiveData: LiveData<List<String>>
-        get() = _buzzLiveData
+    private val _listData = MutableLiveData<List<String>>(emptyList())
+    val listData: LiveData<List<String>>
+        get() = _listData
 
     var name by mutableStateOf("")
     var isConnect by mutableStateOf(false)
 
     fun addData(param: String) {
-        _buzzLiveData.value = _buzzLiveData.value?.let { it + listOf(param) }
+        _listData.value = _listData.value?.let { it + listOf(param) }
     }
 
     fun deviceName(name: String) {
