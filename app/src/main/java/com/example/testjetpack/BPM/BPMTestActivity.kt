@@ -21,6 +21,7 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
     var logListAdapter: LogListAdapter? = null
     private var isConnecting = false
 
+    //view model
     private val vm: LogViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +86,7 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
     }
 
     override fun onResponseReadHistory(dRecord: DRecord) {
-        logListAdapter?.addLog("BPM : ReadHistory -> DRecord = $dRecord", model = vm)
+        logListAdapter?.addLog("BPM : ReadHistory -> DRecord = ${dRecord}", model = vm)
     }
 
     override fun onResponseClearHistory(isSuccess: Boolean) {
@@ -157,10 +158,16 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
         //Connection
         if (name.startsWith("A")) {
             logListAdapter?.addLog("3G Model！", model = vm)
+            //view model
+            vm.deviceName(name)
+
             Global.bpmProtocol!!.connect(mac)
 
         } else {
             logListAdapter?.addLog("4G Model！", model = vm)
+            //view model
+            vm.deviceName(name)
+
             Global.bpmProtocol!!.bond(mac)
 
         }

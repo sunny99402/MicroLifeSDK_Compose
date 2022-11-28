@@ -32,12 +32,13 @@ fun ConnectScreen() {
 @Composable
 fun BPMScreen(model: LogViewModel) {
     val data by model.buzzLiveData.observeAsState(initial = emptyList())
+    val name = model.name
 
     Scaffold(
         topBar = { BPMTopBar() }
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            ButtonView()
+            ButtonView(name!!)
             TextList(data)
         }
     }
@@ -64,7 +65,7 @@ fun TextList(data: List<String>) {
 }
 
 @Composable
-fun ButtonView() {
+fun ButtonView(name: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -129,50 +130,57 @@ fun ButtonView() {
                 Text(text = "ReadVersion")
             }
         }
-        Row(modifier = Modifier
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .padding(start = 3.dp, end = 3.dp)) {
-            Button(
-                onClick = { Global.bpmProtocol!!.readLastData() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 3.dp)
-            ) {
-                Text(text = "Read Last Data")
-            }
-            Button(
-                onClick = { Global.bpmProtocol!!.clearLastData() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 3.dp)
-            ) {
-                Text(text = "Clear Last Data")
-            }
-        }
-        Row(modifier = Modifier
-            .wrapContentWidth(Alignment.CenterHorizontally)
-            .padding(start = 3.dp, end = 3.dp)) {
-            Button(
-                onClick = { Global.bpmProtocol!!.readDeviceTime() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(end = 3.dp)
-            ) {
-                Text(text = "Read Device Time")
-            }
-            Button(
-                onClick = { Global.bpmProtocol!!.syncTiming() },
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 3.dp)
-            ) {
-                Text(text = "Sync Device Time")
+
+        if(name.startsWith("A")) {
+            Row(modifier = Modifier
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .padding(start = 3.dp, end = 3.dp)) {
+                Button(
+                    onClick = { Global.bpmProtocol!!.readLastData() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 3.dp)
+                ) {
+                    Text(text = "Read Last Data")
+                }
+                Button(
+                    onClick = { Global.bpmProtocol!!.clearLastData() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 3.dp)
+                ) {
+                    Text(text = "Clear Last Data")
+                }
             }
         }
+
+        if(name.startsWith("B")) {
+            Row(modifier = Modifier
+                .wrapContentWidth(Alignment.CenterHorizontally)
+                .padding(start = 3.dp, end = 3.dp)) {
+                Button(
+                    onClick = { Global.bpmProtocol!!.readDeviceTime() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 3.dp)
+                ) {
+                    Text(text = "Read Device Time")
+                }
+                Button(
+                    onClick = { Global.bpmProtocol!!.syncTiming() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color(211,211,211)),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 3.dp)
+                ) {
+                    Text(text = "Sync Device Time")
+                }
+            }
+        }
+
     }
 }
 
