@@ -14,9 +14,5 @@ fun NavGraph() {
         composable("chose") {
             ChoseScreen()
         }
-        composable("connect") {
-            ConnectScreen()
-        }
-
     }
 }

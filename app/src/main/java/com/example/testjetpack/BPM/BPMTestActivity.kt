@@ -22,14 +22,14 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
     private var isConnecting = false
 
     //view model
-    private val vm: LogViewModel by viewModels()
+    private val vm: ViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //Initialize the body ester machine Bluetooth module
         super.onCreate(savedInstanceState)
         initParam()
         setContent {
-            ConnectScreen()
+            BPMScreen(model =  vm)
         }
     }
 
@@ -178,22 +178,23 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
         when (state) {
             BPMProtocol.ConnectState.Connected -> {
                 isConnecting = false
+                //view model
+                vm.setConnectState(true)
                 logListAdapter?.addLog("Connected", model = vm)
-                setContent {
-                    BPMScreen(model =  vm)
-                }
             }
             BPMProtocol.ConnectState.ConnectTimeout -> {
                 isConnecting = false
+                //view model
+                vm.setConnectState(false)
                 logListAdapter?.addLog("ConnectTimeout", model = vm)
+                startScan()
             }
             BPMProtocol.ConnectState.Disconnect -> {
                 isConnecting = false
+                //view model
+                vm.setConnectState(false)
                 logListAdapter?.addLog("Disconnected", model = vm)
                 startScan()
-                setContent {
-                    ConnectScreen()
-                }
             }
             BPMProtocol.ConnectState.ScanFinish -> {
                 logListAdapter?.addLog("ScanFinish", model = vm)

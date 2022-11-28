@@ -14,7 +14,7 @@ class LogListAdapter() : BaseAdapter() {
         mLogData = ArrayList()
     }
 
-    fun addLog(message: String, model: LogViewModel): MutableList<String> {
+    fun addLog(message: String, model: ViewModel): MutableList<String> {
         Log.e("addLog", message)
         mLogData.add(message)
 

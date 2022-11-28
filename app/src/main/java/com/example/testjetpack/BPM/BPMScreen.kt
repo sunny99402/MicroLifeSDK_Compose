@@ -1,5 +1,6 @@
 package com.example.testjetpack
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -17,28 +18,20 @@ import androidx.compose.ui.unit.sp
 var userID = "123456789AB"
 var age = 18
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun ConnectScreen() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .wrapContentWidth(Alignment.CenterHorizontally)
-        .wrapContentHeight(Alignment.CenterVertically)) {
-        Text(
-            text = "Connect Device",
-            fontSize = 50.sp)
-    }
-}
-
-@Composable
-fun BPMScreen(model: LogViewModel) {
+fun BPMScreen(model: ViewModel) {
     val data by model.buzzLiveData.observeAsState(initial = emptyList())
-    val name = model.name
+    val name by mutableStateOf(model.name)
+    val connectState by mutableStateOf(model.isConnect)
 
     Scaffold(
         topBar = { BPMTopBar() }
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            ButtonView(name!!)
+            if(connectState) {
+                ButtonView(name)
+            }
             TextList(data)
         }
     }
@@ -56,16 +49,35 @@ fun TextList(data: List<String>) {
         )
         LazyColumn() {
             items(data) { index ->
-                Text(
+                TextItem(
                     text = index,
-                    modifier = Modifier.fillMaxWidth().border(1.dp, color = Color(245,245,245)))
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, color = Color(245, 245, 245))
+                )
             }
         }
     }
 }
 
 @Composable
-fun ButtonView(name: String) {
+fun TextItem(text: String, modifier: Modifier) {
+    var color: Color
+    if(text.startsWith("WRITE")) {
+        color = Color.Red
+    } else if(text.startsWith("NOTIFY")) {
+        color = Color.Blue
+    } else {
+        color = Color.Green
+    }
+    Text(
+        text = text,
+        modifier = modifier,
+        color = color)
+}
+
+@Composable
+fun ButtonView(name: String?) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -131,7 +143,7 @@ fun ButtonView(name: String) {
             }
         }
 
-        if(name.startsWith("A")) {
+        if(name?.startsWith("A") == true) {
             Row(modifier = Modifier
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(start = 3.dp, end = 3.dp)) {
@@ -156,7 +168,7 @@ fun ButtonView(name: String) {
             }
         }
 
-        if(name.startsWith("B")) {
+        if(name?.startsWith("B") == true) {
             Row(modifier = Modifier
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(start = 3.dp, end = 3.dp)) {
