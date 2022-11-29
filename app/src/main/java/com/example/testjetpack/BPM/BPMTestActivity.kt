@@ -72,9 +72,6 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
     }
 
     override fun onClick(v: View) {
-        val btn = findViewById<View>(v.id) as Button
-        logListAdapter?.addLog("WRITE : " + btn.text.toString(), model = vm)
-
     }
 
     override fun onWriteMessage(isSuccess: Boolean, message: String) {
@@ -87,6 +84,7 @@ class BPMTestActivity() : ComponentActivity(), BPMProtocol.OnConnectStateListene
 
     override fun onResponseReadHistory(dRecord: DRecord) {
         logListAdapter?.addLog("BPM : ReadHistory -> DRecord = ${dRecord}", model = vm)
+        //logListAdapter?.addLog("BPM : ReadHistory -> DRecord = ${dRecord.MData}", model = vm)
     }
 
     override fun onResponseClearHistory(isSuccess: Boolean) {
